@@ -1,4 +1,4 @@
-import { Session, User, Game } from "@prisma/client";
+import { Session, User, Game, Server } from "@prisma/client";
 
 export type UserWithNoId = Omit<User, "id">;
 
@@ -26,3 +26,5 @@ export type UpsertEnrollment = {
     CPF: string,
     enrollmentUrl?: string
 };
+
+export type ServerWithNoId = Omit<Server, "id">;

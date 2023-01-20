@@ -12,7 +12,7 @@ export async function findGameByName(name: string): Promise<Game> {
   });
 }
 
-export async function postGame({ name, gameUrl }: GameWithNoId) {
+export async function postGame({ name, gameUrl }: GameWithNoId): Promise<Game> {
   return prisma.game.create({
     data: { name, gameUrl },
   });

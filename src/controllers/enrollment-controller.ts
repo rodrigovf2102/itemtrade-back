@@ -28,7 +28,7 @@ export async function upsertEnrollment(req: AuthenticatedRequest, res: Response)
       return res.status(httpStatus.NOT_FOUND).send(error.detail);
     }
     if (error.detail === "InvalidCPF") {
-      return res.status(httpStatus.NOT_FOUND).send(error.detail);
+      return res.status(httpStatus.BAD_REQUEST).send(error.detail);
     }
     return res.status(httpStatus.BAD_REQUEST).send(error);
   }

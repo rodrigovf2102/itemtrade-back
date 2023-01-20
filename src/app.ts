@@ -1,7 +1,7 @@
 import express, { Express } from "express";
 import cors from "cors";
 import { connectPostgresDb, loadEnv } from "@/config";
-import { usersRouter, gamesRouter, enrollmentRouter } from "@/routers";
+import { usersRouter, gamesRouter, enrollmentRouter, serversRouter } from "@/routers";
 
 loadEnv();
 
@@ -11,6 +11,7 @@ app.use(express.json());
 app.use("/users", usersRouter);
 app.use("/enrollment", enrollmentRouter);
 app.use("/games", gamesRouter);
+app.use("/servers", serversRouter);
 
 export function start(): Promise<Express> {
   connectPostgresDb();

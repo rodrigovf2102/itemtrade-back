@@ -1,4 +1,4 @@
-import { Session, User, Game, Server } from "@prisma/client";
+import { Session, User, Game, Server, Item } from "@prisma/client";
 
 export type UserWithNoId = Omit<User, "id">;
 
@@ -28,3 +28,5 @@ export type UpsertEnrollment = {
 };
 
 export type ServerWithNoId = Omit<Server, "id">;
+
+export type ItemWithNoId = Omit<Item, "id">

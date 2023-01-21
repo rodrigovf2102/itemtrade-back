@@ -17,11 +17,15 @@ export async function getGames(req: Request, res: Response) {
 
 export async function postGame(req: AuthenticatedRequest, res: Response) {
   const { name, gameUrl } = req.body;
+  const {userId} = req;
   try {
-    const game = await gamesService.postGame({ name, gameUrl });
+    const game = await gamesService.postGame({ name, gameUrl }, userId);
     return res.status(httpStatus.CREATED).send(game);
   } catch (error) {
     if (error.detail === "GamesAlreadyExist") {
+      return res.status(httpStatus.CONFLICT).send(error.detail);
+    }
+    if (error.detail === "UserWithoutEnrollment") {
       return res.status(httpStatus.CONFLICT).send(error.detail);
     }
     return res.status(httpStatus.BAD_REQUEST).send(error);

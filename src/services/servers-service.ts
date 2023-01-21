@@ -1,5 +1,6 @@
 import { defaultError } from "@/errors";
 import { ServerWithNoId } from "@/protocols";
+import enrollmentRepository from "@/repositories/enrollment-repository";
 import serverRepository from "@/repositories/server-repository";
 import { Server } from "@prisma/client";
 
@@ -9,7 +10,9 @@ export async function getServers(gameId:number): Promise<Server[]> {
   return servers;
 }
 
-export async function postServer({name,gameId}: ServerWithNoId) : Promise<Server>{
+export async function postServer({name,gameId}: ServerWithNoId, userId:number) : Promise<Server>{
+  const enrollment = await enrollmentRepository.findEnrollmentByUserId(userId);
+  if(!enrollment) throw defaultError("UserWithoutEnrollment");
   const server = await serverRepository.findServerByName(name);
   if(server){
     throw defaultError("GameAlreadyExist");

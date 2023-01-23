@@ -4,8 +4,9 @@ import { Request, Response } from "express";
 import httpStatus from "http-status";
 
 export async function getGames(req: Request, res: Response) {
+  const filter = req.query.filter as string;
   try {
-    const games = await gamesService.getGames();
+    const games = await gamesService.getGames(filter);
     return res.status(httpStatus.OK).send(games);
   } catch (error) {
     if (error.detail === "GamesNotFound") {

@@ -2,8 +2,10 @@ import { prisma } from "@/config";
 import { GameWithNoId } from "@/protocols";
 import { Game } from "@prisma/client";
 
-export async function findGames(): Promise<Game[]> {
-  return prisma.game.findMany({});
+export async function findGames(filter:string): Promise<Game[]> {
+  return prisma.game.findMany({
+    where:{name:{ startsWith:filter}}
+  });
 }
 
 export async function findGameByName(name: string): Promise<Game> {

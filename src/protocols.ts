@@ -35,4 +35,11 @@ export type UpsertEnrollment = {
 
 export type ServerWithNoId = Omit<Server, "id">;
 
+export type ServerNoIdName = {
+    name: string,
+    gameName: string
+}
+
 export type ItemWithNoId = Omit<Item, "id">
+
+export type ItemWithNoIdNoEnrollId = Omit<Item,"id"|"enrollmentId">

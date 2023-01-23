@@ -7,8 +7,7 @@ export const itemSchema = Joi.object<ItemWithNoId>({
   amount: Joi.number().required(),
   itemUrl: Joi.string().pattern(new RegExp("^https://")).required(),
   serverId : Joi.number().required(),
-  enrollmentId : Joi.number().required(),
-  itemType : Joi.any().allow("Dinheiro","Equipamento","Recurso","Utilizáveis","Outros","Todas"),
+  itemType : Joi.any().allow("Dinheiro","Equipamento","Recurso","Utilizaveis","Outros","Todas"),
 });
 
 

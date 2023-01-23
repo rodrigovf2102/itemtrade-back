@@ -6,7 +6,7 @@ import { authenticateToken } from "@/middlewares/authentication-middleware";
 
 const itemsRouter = Router();
 
-itemsRouter.get("/:serverId/:filtro", getItems);
+itemsRouter.get("/:serverId/:type", getItems);
 itemsRouter.post("/", validateBody(itemSchema), authenticateToken, postItem);
 
 export { itemsRouter };

@@ -1,10 +1,11 @@
 import { prisma } from "@/config";
-import { ServerWithNoId } from "@/protocols";
+import { ServerNoIdName, ServerWithNoId } from "@/protocols";
 import { Server } from "@prisma/client";
 
-export async function findServersByGameId(gameId : number): Promise<Server[]> {
+export async function findServersByGameId(gameId : number, filter: string): Promise<Server[]> {
   return prisma.server.findMany({
-    where: { gameId }
+    where: { gameId, name: { startsWith: filter } },
+    include: {Game:true}
   });
 }
 

@@ -1,9 +1,9 @@
-import { ServerWithNoId } from "@/protocols";
+import { ServerNoIdName } from "@/protocols";
 import Joi from "joi";
 
-export const serverSchema = Joi.object<ServerWithNoId>({
+export const serverSchema = Joi.object<ServerNoIdName>({
   name: Joi.string().min(3).required(),
-  gameId: Joi.number().required()
+  gameName: Joi.string().required()
 });
 
 

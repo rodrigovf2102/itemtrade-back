@@ -1,12 +1,12 @@
 import { AuthenticatedRequest } from "@/middlewares/authentication-middleware";
-import { ItemWithNoId } from "@/protocols";
+import { ItemWithNoIdNoEnrollId } from "@/protocols";
 import itemsService from "@/services/items-service";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 
 export async function getItems(req: Request, res: Response) {
   try {
-    const itemType = req.params.filtro;
+    const itemType = req.params.type;
     const serverId = Number(req.params.serverId);
     const items = await itemsService.getItems(serverId, itemType);
     return res.status(httpStatus.OK).send(items);
@@ -25,7 +25,7 @@ export async function getItems(req: Request, res: Response) {
 }
 
 export async function postItem(req: AuthenticatedRequest, res: Response) {
-  const newItem = req.body as ItemWithNoId;
+  const newItem = req.body as ItemWithNoIdNoEnrollId;
   const { userId } = req;
   try {
     const item = await itemsService.postItem(newItem, userId);

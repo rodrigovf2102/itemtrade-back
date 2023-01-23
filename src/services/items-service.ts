@@ -1,5 +1,5 @@
 import { defaultError } from "@/errors";
-import { ItemWithNoId } from "@/protocols";
+import { ItemWithNoId, ItemWithNoIdNoEnrollId } from "@/protocols";
 import enrollmentRepository from "@/repositories/enrollment-repository";
 import itemRepository from "@/repositories/item-repository";
 import { Item, ITEMTYPE } from "@prisma/client";
@@ -17,10 +17,19 @@ export async function getItems(serverId: number, itemType: string): Promise<Item
   return items;
 }
 
-export async function postItem(newItem: ItemWithNoId, userId: number): Promise<Item> {
+export async function postItem(newItem: ItemWithNoIdNoEnrollId, userId: number): Promise<Item> {
   const enrollment = await enrollmentRepository.findEnrollmentByUserId(userId);
   if (!enrollment) throw defaultError("UserWithoutEnrollment");
-  const createdItem = await itemRepository.postItem(newItem);
+  const item : ItemWithNoId = {
+    enrollmentId: enrollment.id,
+    name: newItem.name,
+    price: newItem.price,
+    amount : newItem.amount,
+    itemUrl: newItem.itemUrl,
+    serverId: newItem.serverId,
+    itemType: newItem.itemType
+  };
+  const createdItem = await itemRepository.postItem(item);
   return createdItem;
 }
 

@@ -4,8 +4,10 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "ttsc -p tsconfig.build.json",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/server.ts",
+    "start": "NODE_ENV=development node dist/server.js",
     "dev": "NODE_ENV=development nodemon --watch 'src/' --exec 'ts-node -r tsconfig-paths/register ./src/server.ts' -e ts",
     "dev:load-envs": "dotenv -e .env.development",
     "db:dump": "sudo su -c 'pg_dump itemtrade --inserts --no-owner' postgres > dump.sql",
@@ -53,6 +55,7 @@
     "prettier": "^2.8.3",
     "prisma": "^4.9.0",
     "ts-node": "^10.9.1",
+    "ttypescript": "^1.5.15",
     "typescript-transform-paths": "^3.4.6"
   }
 }

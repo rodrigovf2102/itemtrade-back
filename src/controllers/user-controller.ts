@@ -1,4 +1,4 @@
-import { UserWithNoId } from "@/protocols";
+import { SessionWithNoId, UserWithNoId } from "@/protocols";
 import userService from "@/services/users-service";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
@@ -25,12 +25,25 @@ export async function signInPost(req: Request, res: Response) {
 
   try {
     const result = await userService.signIn({ email, password });
-
     return res.status(httpStatus.OK).send(result);
   } catch (error) {
     if (error.detail === "PasswordInvalid") {
       return res.status(httpStatus.UNAUTHORIZED).send("InvalidCredentials");
     }
+    if (error.detail === "EmailNotFound") {
+      return res.status(httpStatus.UNAUTHORIZED).send("InvalidCredentials");
+    }
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
+}
+
+export async function signInToken(req: Request, res: Response){
+  const { userId, token} = req.body;
+  try {
+    const session = await userService.signInWithToken({ userId, token});
+    return res.status(httpStatus.OK).send(true);
+  } catch (error) {
+    return res.status(httpStatus.NOT_FOUND).send(false);
+  }
+
 }

@@ -1,5 +1,5 @@
 import { defaultError } from "@/errors";
-import { UserWithEmailAndToken, UserWithNoId } from "@/protocols";
+import { SessionWithNoId, UserWithEmailAndToken, UserWithEmailTokenAndId, UserWithNoId } from "@/protocols";
 import userRepository from "@/repositories/user-repository";
 import sessionRepository from "@/repositories/session-repository";
 import { User } from "@prisma/client";
@@ -20,11 +20,17 @@ async function verifyEmail(email: string) {
   }
 }
 
-export async function signIn({ email, password }: UserWithNoId): Promise<UserWithEmailAndToken> {
+export async function signIn({ email, password }: UserWithNoId): Promise<UserWithEmailTokenAndId> {
   const user = await getUser(email);
   await validatePassword(password, user.password);
   const token = await createSession(user.id);
-  const session = { email: user.email, token } as UserWithEmailAndToken;
+  const session = { id: user.id ,email: user.email, token } as UserWithEmailTokenAndId;
+  return session;
+}
+
+export async function signInWithToken({userId, token} : SessionWithNoId){
+  const session = await sessionRepository.findSessionByUserIdAndToken({ userId, token});
+  if(!session) throw defaultError ("SessionNotFound");
   return session;
 }
 
@@ -48,6 +54,7 @@ async function createSession(userId: number) {
 const userService = {
   createUser,
   signIn,
+  signInWithToken
 };
 
 export default userService;

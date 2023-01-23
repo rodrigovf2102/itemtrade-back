@@ -12,6 +12,12 @@ export type UserWithEmailAndToken = {
     token: string
 };
 
+export type UserWithEmailTokenAndId = {
+    email: string,
+    token: string,
+    id: number
+};
+
 export type UserWithIdAndToken = {
     id: number,
     token: string

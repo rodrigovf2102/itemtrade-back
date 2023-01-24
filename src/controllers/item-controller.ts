@@ -9,7 +9,8 @@ export async function getItems(req: Request, res: Response) {
     const itemType = req.params.type;
     const serverId = Number(req.params.serverId);
     const filter = req.query.filter as string;
-    const items = await itemsService.getItems(serverId, itemType, filter);
+    const itemId = Number(req.query.itemId);
+    const items = await itemsService.getItems(serverId, itemType, filter, itemId);
     return res.status(httpStatus.OK).send(items);
   } catch (error) {
     if (error.detail === "ItemsNotFound") {

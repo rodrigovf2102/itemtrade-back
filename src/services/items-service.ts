@@ -6,7 +6,12 @@ import itemRepository from "@/repositories/item-repository";
 import serverRepository from "@/repositories/server-repository";
 import { Item, ITEMTYPE } from "@prisma/client";
 
-export async function getItems(serverId: number, itemType: string, filter: string): Promise<Item[]> {
+export async function getItems(serverId: number, itemType: string, filter: string, itemId: number): Promise<Item[]> {
+  let items : Item[];
+  if(!isNaN(itemId) && itemId!==0) {
+    items = await itemRepository.findItemsById(itemId);
+    return items;
+  }
   if (isNaN(serverId) || serverId===undefined) throw defaultError("ServerNotFound");
   if(!itemType || itemType==="undefined" || itemType==="Todos") itemType = "";
   if(filter==="undefined") filter="";
@@ -16,8 +21,9 @@ export async function getItems(serverId: number, itemType: string, filter: strin
   for (const itemCategory of itemCategories) {
     if (itemType === itemCategory) itemTypeExist = itemType as ITEMTYPE;
   }
-  let items : Item[];
+
   if(!serverId && itemType==="") items = await itemRepository.findItems(filter);
+  if(!serverId && itemTypeExist) items = await itemRepository.findItemsByItemTypeAndFilter(itemTypeExist,filter);
   if(serverId && itemTypeExist)items = await itemRepository.findItemsByServerIdAndItemType(serverId, itemTypeExist, filter);
   if(serverId && !itemTypeExist) items = await itemRepository.findItemsByServerId(serverId,filter);
   return items;

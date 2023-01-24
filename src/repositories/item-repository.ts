@@ -13,6 +13,26 @@ export async function findItemsByServerIdAndItemType(serverId:number, itemType:I
     });
 }
 
+export async function findItemsByItemTypeAndFilter(itemType:ITEMTYPE, filter:string): Promise<Item[]> {
+  return prisma.item.findMany({
+    where: {
+      itemType,
+      name: {contains:filter}
+    },
+    include:{Game:true, Server: true, Enrollment: true}
+  });
+}
+
+export async function findItemsById(itemId:number){
+  return prisma.item.findMany({
+    where: {
+      id:itemId,
+    },
+    include:{Game:true, Server: true, Enrollment: true}
+  });
+}
+
+
 export async function findItemsByServerId(serverId:number, filter:string): Promise<Item[]> {
   return prisma.item.findMany({
     where: {
@@ -43,7 +63,9 @@ const itemRepository = {
   findItemsByServerIdAndItemType,
   postItem,
   findItems,
-  findItemsByServerId
+  findItemsByServerId,
+  findItemsByItemTypeAndFilter,
+  findItemsById
 };
 
 export default itemRepository;

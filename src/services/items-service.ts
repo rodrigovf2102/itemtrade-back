@@ -1,32 +1,42 @@
 import { defaultError } from "@/errors";
-import { ItemWithNoId, ItemWithNoIdNoEnrollId } from "@/protocols";
+import { ItemNoIdNoEnrollIdNoGameIdNoServerIdServerName, ItemWithNoId, ItemWithNoIdNoEnrollIdNoGameId } from "@/protocols";
 import enrollmentRepository from "@/repositories/enrollment-repository";
+import gameRepository from "@/repositories/game-repository";
 import itemRepository from "@/repositories/item-repository";
+import serverRepository from "@/repositories/server-repository";
 import { Item, ITEMTYPE } from "@prisma/client";
 
-export async function getItems(serverId: number, itemType: string): Promise<Item[]> {
-  if (!serverId || isNaN(serverId)) throw defaultError("ServerNotFound");
-  const itemCategories = ["Dinheiro", "Equipamento", "Recurso", "Utilizáveis", "Outros", "Todas"];
-  let itemTypeExist: ITEMTYPE;
+export async function getItems(serverId: number, itemType: string, filter: string): Promise<Item[]> {
+  if (isNaN(serverId) || serverId===undefined) throw defaultError("ServerNotFound");
+  if(!itemType || itemType==="undefined" || itemType==="Todos") itemType = "";
+  if(filter==="undefined") filter="";
+  filter = filter.toUpperCase();
+  const itemCategories = ["Dinheiro", "Equipamento", "Recurso", "Utilizavel","Raros", "Outros", "Todos"];
+  let itemTypeExist : ITEMTYPE;
   for (const itemCategory of itemCategories) {
     if (itemType === itemCategory) itemTypeExist = itemType as ITEMTYPE;
   }
-  if (!itemTypeExist) throw defaultError("ItemTypeNotFound");
-
-  const items = await itemRepository.findItemsByServerIdAndItemType(serverId, itemTypeExist);
+  let items : Item[];
+  if(!serverId && itemType==="") items = await itemRepository.findItems(filter);
+  if(serverId && itemTypeExist)items = await itemRepository.findItemsByServerIdAndItemType(serverId, itemTypeExist, filter);
+  if(serverId && !itemTypeExist) items = await itemRepository.findItemsByServerId(serverId,filter);
   return items;
 }
 
-export async function postItem(newItem: ItemWithNoIdNoEnrollId, userId: number): Promise<Item> {
+export async function postItem(newItem: ItemNoIdNoEnrollIdNoGameIdNoServerIdServerName, userId: number): Promise<Item> {
   const enrollment = await enrollmentRepository.findEnrollmentByUserId(userId);
   if (!enrollment) throw defaultError("UserWithoutEnrollment");
+  const game = await gameRepository.findGameByName(newItem.gameName.toUpperCase());
+  const server = await serverRepository.findServerByNameAndGameId(newItem.serverName.toUpperCase(),game.id);
+  if(!server) throw defaultError("ServerNotFound");
   const item : ItemWithNoId = {
     enrollmentId: enrollment.id,
-    name: newItem.name,
+    name: newItem.name.toUpperCase(),
     price: newItem.price,
     amount : newItem.amount,
     itemUrl: newItem.itemUrl,
-    serverId: newItem.serverId,
+    serverId: server.id,
+    gameId: server.gameId,
     itemType: newItem.itemType
   };
   const createdItem = await itemRepository.postItem(item);

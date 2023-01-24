@@ -1,13 +1,14 @@
-import { ItemWithNoId } from "@/protocols";
+import { ItemNoIdNoEnrollIdNoGameIdNoServerIdServerName } from "@/protocols";
 import Joi from "joi";
 
-export const itemSchema = Joi.object<ItemWithNoId>({
+export const itemSchema = Joi.object<ItemNoIdNoEnrollIdNoGameIdNoServerIdServerName>({
   name: Joi.string().min(4).max(70).required(),
   price: Joi.number().required(),
   amount: Joi.number().required(),
   itemUrl: Joi.string().pattern(new RegExp("^https://")).required(),
-  serverId : Joi.number().required(),
-  itemType : Joi.any().allow("Dinheiro","Equipamento","Recurso","Utilizaveis","Outros","Todas"),
+  gameName: Joi.string().required(),
+  serverName : Joi.string().required(),
+  itemType : Joi.any().allow("Dinheiro","Equipamento","Recurso","Utilizavel","Outros","Raros"),
 });
 
 

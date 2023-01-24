@@ -1,5 +1,5 @@
 import { AuthenticatedRequest } from "@/middlewares/authentication-middleware";
-import { ItemWithNoIdNoEnrollId } from "@/protocols";
+import { ItemNoIdNoEnrollIdNoGameIdNoServerIdServerName, ItemWithNoIdNoEnrollIdNoGameId } from "@/protocols";
 import itemsService from "@/services/items-service";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
@@ -8,7 +8,8 @@ export async function getItems(req: Request, res: Response) {
   try {
     const itemType = req.params.type;
     const serverId = Number(req.params.serverId);
-    const items = await itemsService.getItems(serverId, itemType);
+    const filter = req.query.filter as string;
+    const items = await itemsService.getItems(serverId, itemType, filter);
     return res.status(httpStatus.OK).send(items);
   } catch (error) {
     if (error.detail === "ItemsNotFound") {
@@ -25,7 +26,7 @@ export async function getItems(req: Request, res: Response) {
 }
 
 export async function postItem(req: AuthenticatedRequest, res: Response) {
-  const newItem = req.body as ItemWithNoIdNoEnrollId;
+  const newItem = req.body as ItemNoIdNoEnrollIdNoGameIdNoServerIdServerName;
   const { userId } = req;
   try {
     const item = await itemsService.postItem(newItem, userId);
@@ -36,6 +37,9 @@ export async function postItem(req: AuthenticatedRequest, res: Response) {
     }
     if (error.detail === "UserWithoutEnrollment") {
       return res.status(httpStatus.CONFLICT).send(error.detail);
+    }
+    if (error.detail === "ServerNotFound") {
+      return res.status(httpStatus.NOT_FOUND).send(error.detail);
     }
     return res.status(httpStatus.BAD_REQUEST).send(error);
   }

@@ -1,4 +1,4 @@
-import { Session, User, Game, Server, Item } from "@prisma/client";
+import { Session, User, Game, Server, Item, ITEMTYPE } from "@prisma/client";
 
 export type UserWithNoId = Omit<User, "id">;
 
@@ -43,3 +43,15 @@ export type ServerNoIdName = {
 export type ItemWithNoId = Omit<Item, "id">
 
 export type ItemWithNoIdNoEnrollId = Omit<Item,"id"|"enrollmentId">
+
+export type ItemWithNoIdNoEnrollIdNoGameId = Omit<Item,"id"|"enrollmentId"|"gameId">
+
+export type ItemNoIdNoEnrollIdNoGameIdNoServerIdServerName = {
+    name: string,
+    price: number,
+    amount: number,
+    itemUrl: string,
+    gameName: string,
+    serverName: string,
+    itemType: ITEMTYPE
+  } 

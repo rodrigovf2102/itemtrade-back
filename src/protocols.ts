@@ -54,4 +54,8 @@ export type ItemNoIdNoEnrollIdNoGameIdNoServerIdServerName = {
     gameName: string,
     serverName: string,
     itemType: ITEMTYPE
-  } 
+  }
+
+export type Amount = {
+    amount : number
+}

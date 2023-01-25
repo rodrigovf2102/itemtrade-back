@@ -23,14 +23,15 @@ model User {
 }
 
 model Enrollment {
-  id            Int    @id @default(autoincrement())
-  name          String @db.VarChar(200)
-  CPF           String @unique @db.VarChar(11)
-  userId        Int    @unique
-  balance       Int?
-  enrollmentUrl String @unique
-  User          User   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Item          Item[]
+  id             Int    @id @default(autoincrement())
+  name           String @db.VarChar(200)
+  CPF            String @unique @db.VarChar(11)
+  userId         Int    @unique
+  balance        Int?   @default(0)
+  enrollmentUrl  String @unique
+  freezedBalance Int?   @default(0)
+  User           User   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Item           Item[]
 }
 
 model Game {

@@ -17,9 +17,18 @@ export async function upsertEnrollment(newEnrollment: UpsertEnrollment, userId:n
   return enrollment;
 }
 
+export async function updateEnrollmentBalance(balance:number, userId:number):Promise<Enrollment>{
+  if(isNaN(balance)) throw defaultError("InvalidBalance");
+  const enrollment = await enrollmentRepository.findEnrollmentByUserId(userId);
+  balance = enrollment.balance + balance;
+  const enrollmentUpdated = await enrollmentRepository.updateEnrollmentBalance(balance,enrollment.id);
+  return enrollmentUpdated; 
+}
+
 const enrollmentService = {
   getEnrollment,
-  upsertEnrollment
+  upsertEnrollment,
+  updateEnrollmentBalance
 };
 
 export default enrollmentService;

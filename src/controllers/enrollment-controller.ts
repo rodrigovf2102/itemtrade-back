@@ -1,5 +1,5 @@
 import { AuthenticatedRequest } from "@/middlewares";
-import { UpsertEnrollment } from "@/protocols";
+import { Amount, UpsertEnrollment } from "@/protocols";
 import enrollmentService from "@/services/enrollment-service";
 import { Response } from "express";
 import httpStatus from "http-status";
@@ -31,5 +31,19 @@ export async function upsertEnrollment(req: AuthenticatedRequest, res: Response)
       return res.status(httpStatus.BAD_REQUEST).send(error.detail);
     }
     return res.status(httpStatus.BAD_REQUEST).send(error);
+  }
+}
+
+export async function updateBalance(req: AuthenticatedRequest, res: Response){
+  try {
+    const { userId} = req;
+    const balance = req.body as Amount;
+    const enrollment = await enrollmentService.updateEnrollmentBalance(balance.amount, userId);
+    return res.status(httpStatus.OK).send(enrollment);
+  } catch (error) {
+    if (error.detail === "EnrollmentNotFound") {
+      return res.status(httpStatus.NOT_FOUND).send(error.detail);
+    }  
+    return res.status(httpStatus.BAD_REQUEST).send(error); 
   }
 }

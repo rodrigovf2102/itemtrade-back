@@ -26,9 +26,17 @@ export function findEnrollmentByUserId(userId: number): Promise<Enrollment> {
   });
 }
 
+export function updateEnrollmentBalance(balance:number, id:number):Promise<Enrollment>{
+  return prisma.enrollment.update({
+    where:{id},
+    data:{balance}
+  });
+}
+
 const enrollmentRepository = {
   upsertEnrollment,
   findEnrollmentByUserId,
+  updateEnrollmentBalance
 };
 
 export default enrollmentRepository;

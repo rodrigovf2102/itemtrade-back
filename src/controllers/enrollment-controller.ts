@@ -38,7 +38,7 @@ export async function updateBalance(req: AuthenticatedRequest, res: Response){
   try {
     const { userId} = req;
     const balance = req.body as Amount;
-    const enrollment = await enrollmentService.updateEnrollmentBalance(balance.amount, userId);
+    const enrollment = await enrollmentService.updateEnrollmentBalance(balance, userId);
     return res.status(httpStatus.OK).send(enrollment);
   } catch (error) {
     if (error.detail === "EnrollmentNotFound") {

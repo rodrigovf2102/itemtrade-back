@@ -1,8 +1,9 @@
 import { defaultError } from "@/errors";
-import { UpsertEnrollment } from "@/protocols";
+import { Amount, UpsertEnrollment } from "@/protocols";
 import { Enrollment } from "@prisma/client";
 import { isValidCPF } from "@brazilian-utils/brazilian-utils";
 import enrollmentRepository from "@/repositories/enrollment-repository";
+import paymentRepository from "@/repositories/payment-repository";
 
 export async function getEnrollment(userId:number): Promise<Enrollment> {
   const enrollment = await enrollmentRepository.findEnrollmentByUserId(userId);
@@ -17,11 +18,14 @@ export async function upsertEnrollment(newEnrollment: UpsertEnrollment, userId:n
   return enrollment;
 }
 
-export async function updateEnrollmentBalance(balance:number, userId:number):Promise<Enrollment>{
-  if(isNaN(balance)) throw defaultError("InvalidBalance");
+export async function updateEnrollmentBalance(amountInfo: Amount, userId:number):Promise<Enrollment>{
+  if(isNaN(amountInfo.amount)) throw defaultError("InvalidamountInfo");
   const enrollment = await enrollmentRepository.findEnrollmentByUserId(userId);
-  balance = enrollment.balance + balance;
-  const enrollmentUpdated = await enrollmentRepository.updateEnrollmentBalance(balance,enrollment.id);
+  if(!enrollment) throw defaultError("EnrollmentNotFound");
+  const payment = await paymentRepository.getPaymentByHash(amountInfo.paymentHash);
+  if(!payment) throw defaultError("PaymentNotFound");
+  amountInfo.amount = enrollment.balance + amountInfo.amount;
+  const enrollmentUpdated = await enrollmentRepository.updateEnrollmentBalance(amountInfo.amount,enrollment.id);
   return enrollmentUpdated; 
 }
 

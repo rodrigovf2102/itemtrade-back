@@ -8,7 +8,8 @@ export const upsertEnrollmentSchema = Joi.object<UpsertEnrollment>({
 });
 
 export const updateEnrollmentSchema = Joi.object<Amount>({
-  amount: Joi.number().required()
+  amount: Joi.number().required(),
+  paymentHash: Joi.string().required()
 });
 
 

@@ -5,3 +5,4 @@ export * from "./servers-schema";
 export * from "./items-schema";
 export * from "./payments-schema";
 export * from "./trades-schema";
+export * from "./messages-schema";

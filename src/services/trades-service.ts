@@ -3,7 +3,7 @@ import enrollmentRepository from "@/repositories/enrollment-repository";
 import itemRepository from "@/repositories/item-repository";
 import tradeRepository from "@/repositories/trade-repository";
 import tradeAvaliationRepository from "@/repositories/tradeAvaliation";
-import { OPERATIONTYPE, Trade } from "@prisma/client";
+import { OPERATIONTYPE, Trade, TradeAvaliation } from "@prisma/client";
 
 export async function postTrade(sellerEnrollmentId: number, userId: number, itemId: number): Promise<Trade> {
   const buyerEnrollment = await enrollmentRepository.findEnrollmentByUserId(userId);
@@ -36,9 +36,18 @@ export async function getTrades(userId: number, tradeType: string): Promise<Trad
   return trades;
 }
 
+export async function getTradeAvaliations(userId:number) : Promise<TradeAvaliation[]>{
+  const enrollment = await enrollmentRepository.findEnrollmentByUserId(userId);
+  if (!enrollment) throw defaultError("UserEnrollmentNotFound");
+
+  const tradeAvaliations = await tradeAvaliationRepository.getTradeAvaliations(enrollment.id);
+  return tradeAvaliations;
+}
+
 const tradeService = {
   postTrade,
   getTrades,
+  getTradeAvaliations
 };
 
 export default tradeService;

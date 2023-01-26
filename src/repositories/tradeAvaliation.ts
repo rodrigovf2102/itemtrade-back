@@ -7,8 +7,15 @@ export async function postTradeAvaliation(tradeType: OPERATIONTYPE, enrollmentId
   });
 }
 
+export async function getTradeAvaliations(enrollmentId: number) : Promise<TradeAvaliation[]>{
+  return prisma.tradeAvaliation.findMany({
+    where: { enrollmentId }
+  });
+}
+
 const tradeAvaliationRepository = {
-  postTradeAvaliation
+  postTradeAvaliation,
+  getTradeAvaliations
 };
 
 export default tradeAvaliationRepository;

@@ -24,3 +24,13 @@ export async function getTrades(req: AuthenticatedRequest, res: Response){
     return res.status(httpStatus.BAD_REQUEST).send(error);
   }
 }
+
+export async function getTradeAvaliations(req: AuthenticatedRequest, res: Response){
+  const { userId } = req;
+  try {
+    const tradeAvaliations = await tradeService.getTradeAvaliations(userId);
+    return res.status(httpStatus.OK).send(tradeAvaliations);
+  } catch (error) {
+    return res.status(httpStatus.BAD_REQUEST).send(error);
+  }
+}

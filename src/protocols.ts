@@ -1,4 +1,4 @@
-import { Session, User, Game, Server, Item, ITEMTYPE, Payments } from "@prisma/client";
+import { Session, User, Game, Server, Item, ITEMTYPE, Payments, Trade } from "@prisma/client";
 
 export type UserWithNoId = Omit<User, "id">;
 
@@ -66,3 +66,6 @@ export type PaymentPost = Omit<Payments,"id"|"enrollmentId"|"paymentHash">
 export type PaymentWithNoId = Omit<Payments,"id">
 
 export type PaymentNoIdNoEnrolId = Omit<Payments,"id"|"enrollmentId">
+
+export type TradePost = Pick<Trade, "sellerEnrollmentId" | "itemId">
+

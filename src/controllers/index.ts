@@ -4,3 +4,4 @@ export * from "./enrollment-controller";
 export * from "./server-controller";
 export * from "./item-controller";
 export * from "./payment-controller";
+export * from "./trade-controller";

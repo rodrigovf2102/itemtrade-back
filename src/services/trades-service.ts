@@ -1,0 +1,44 @@
+import { defaultError } from "@/errors";
+import enrollmentRepository from "@/repositories/enrollment-repository";
+import itemRepository from "@/repositories/item-repository";
+import tradeRepository from "@/repositories/trade-repository";
+import tradeAvaliationRepository from "@/repositories/tradeAvaliation";
+import { OPERATIONTYPE, Trade } from "@prisma/client";
+
+export async function postTrade(sellerEnrollmentId: number, userId: number, itemId: number): Promise<Trade> {
+  const buyerEnrollment = await enrollmentRepository.findEnrollmentByUserId(userId);
+  if (!buyerEnrollment) throw defaultError("UserEnrollmentNotFound");
+  const item = await itemRepository.findItemsById(itemId);
+  if (!item) throw defaultError("ItemNotFound");
+
+  const tradeTypeBuyer: OPERATIONTYPE = OPERATIONTYPE.PURCHASE;
+  const tradeTypeSeller: OPERATIONTYPE = OPERATIONTYPE.SALE;
+
+  await tradeAvaliationRepository.postTradeAvaliation(tradeTypeBuyer, buyerEnrollment.id);
+  await tradeAvaliationRepository.postTradeAvaliation(tradeTypeSeller, sellerEnrollmentId);
+
+  const trade = await tradeRepository.postTradeByEnrollmentsIds(sellerEnrollmentId, buyerEnrollment.id, itemId);
+  return trade;
+}
+
+export async function getTrades(userId: number, tradeType: string): Promise<Trade[]> {
+  if (tradeType !== OPERATIONTYPE.PURCHASE && tradeType !== OPERATIONTYPE.SALE) {
+    throw defaultError("InvalidTradeType");
+  }
+  const enrollment = await enrollmentRepository.findEnrollmentByUserId(userId);
+  if (!enrollment) throw defaultError("UserEnrollmentNotFound");
+  let trades;
+  if (tradeType === OPERATIONTYPE.PURCHASE) {
+    trades = tradeRepository.findTradesByBuyerEnrollmentId(enrollment.id);
+    return trades;
+  }
+  trades = tradeRepository.findTradesBySellerEnrollmentId(enrollment.id);
+  return trades;
+}
+
+const tradeService = {
+  postTrade,
+  getTrades,
+};
+
+export default tradeService;

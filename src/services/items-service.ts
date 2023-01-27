@@ -1,5 +1,5 @@
 import { defaultError } from "@/errors";
-import { ItemNoIdNoEnrollIdNoGameIdNoServerIdServerName, ItemWithNoId, ItemWithNoIdNoEnrollIdNoGameId } from "@/protocols";
+import { ItemNoIdNoEnrollIdNoGameIdNoServerIdServerName, ItemWithNoId } from "@/protocols";
 import enrollmentRepository from "@/repositories/enrollment-repository";
 import gameRepository from "@/repositories/game-repository";
 import itemRepository from "@/repositories/item-repository";

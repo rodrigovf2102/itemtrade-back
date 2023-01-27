@@ -4,7 +4,7 @@ import messageRepository from "@/repositories/message-repository";
 import { Message, TradeMessage } from "@prisma/client";
 
 export async function getTradeMessages(tradeId: number, userId: number): Promise<TradeMessage[]> {
-  if (isNaN(tradeId)) throw defaultError("TradeNoutFound");
+
   const enrollment = await enrollmentRepository.findEnrollmentByUserId(userId);
   if (!enrollment) throw defaultError("EnrollmentNotFound");
 

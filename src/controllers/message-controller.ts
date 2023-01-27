@@ -5,12 +5,12 @@ import httpStatus from "http-status";
 
 export async function postMessage(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
-  const { text } = req.body;
-  const tradeId = Number(req.params.tradeId);
+  const { text, tradeId } = req.body;
   try {
     const message = await messagesService.postMessage(userId,tradeId,text);
     return res.status(httpStatus.CREATED).send(message);
   } catch (error) {
+    console.log(error);
     return res.status(httpStatus.BAD_REQUEST).send(error);
   }
 }

@@ -23,7 +23,7 @@ export async function updateEnrollmentBalance(amountInfo: Amount, userId:number)
   const enrollment = await enrollmentRepository.findEnrollmentByUserId(userId);
   if(!enrollment) throw defaultError("EnrollmentNotFound");
   const payment = await paymentRepository.getPaymentByHash(amountInfo.paymentHash);
-  if(!payment) throw defaultError("PaymentNotFound");
+  if(!payment && amountInfo.amount > 0) throw defaultError("PaymentNotFound");
   amountInfo.amount = enrollment.balance + amountInfo.amount;
   const enrollmentUpdated = await enrollmentRepository.updateEnrollmentBalance(amountInfo.amount,enrollment.id);
   return enrollmentUpdated; 

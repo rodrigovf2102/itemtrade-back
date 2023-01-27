@@ -34,3 +34,25 @@ export async function getTradeAvaliations(req: AuthenticatedRequest, res: Respon
     return res.status(httpStatus.BAD_REQUEST).send(error);
   }
 }
+
+export async function getTrade(req: AuthenticatedRequest, res: Response){
+  const {userId } = req;
+  const tradeId = Number(req.params.tradeId);
+  try {
+    const trade = await tradeService.getTradeById(tradeId, userId);
+    return res.status(httpStatus.OK).send(trade);
+  } catch (error) {
+    return res.status(httpStatus.BAD_REQUEST).send(error);
+  }
+}
+
+export async function updateTradeStatus(req: AuthenticatedRequest, res: Response){
+  const { userId } = req;
+  const tradeId = Number(req.params.tradeId);
+  try {
+    const updatedTrade = await tradeService.updateTradeStatus(userId, tradeId);
+    return res.status(httpStatus.OK).send(updatedTrade);
+  } catch (error) {
+    return res.status(httpStatus.BAD_REQUEST).send(error);   
+  }
+}

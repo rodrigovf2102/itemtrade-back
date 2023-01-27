@@ -26,6 +26,12 @@ export function findEnrollmentByUserId(userId: number): Promise<Enrollment> {
   });
 }
 
+export function findEnrollmentById(id: number): Promise<Enrollment> {
+  return prisma.enrollment.findFirst({
+    where: { id },
+  });
+}
+
 export function updateEnrollmentBalance(balance:number, id:number):Promise<Enrollment>{
   return prisma.enrollment.update({
     where:{id},
@@ -33,10 +39,19 @@ export function updateEnrollmentBalance(balance:number, id:number):Promise<Enrol
   });
 }
 
+export function updateEnrollmentFreezedBalance(balance:number, id:number):Promise<Enrollment>{
+  return prisma.enrollment.update({
+    where:{id},
+    data:{freezedBalance: balance}
+  });
+}
+
 const enrollmentRepository = {
   upsertEnrollment,
   findEnrollmentByUserId,
-  updateEnrollmentBalance
+  updateEnrollmentBalance,
+  updateEnrollmentFreezedBalance,
+  findEnrollmentById
 };
 
 export default enrollmentRepository;

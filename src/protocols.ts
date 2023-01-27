@@ -1,4 +1,4 @@
-import { Session, User, Game, Server, Item, ITEMTYPE, Payments, Trade, Message } from "@prisma/client";
+import { Session, User, Game, Server, Item, ITEMTYPE, Payments, Trade, Message, Enrollment, TRADESTATUS } from "@prisma/client";
 
 export type UserWithNoId = Omit<User, "id">;
 
@@ -40,11 +40,11 @@ export type ServerNoIdName = {
     gameName: string
 }
 
-export type ItemWithNoId = Omit<Item, "id">
+export type ItemWithNoId = Omit<Item, "id"|"inTrade">
 
-export type ItemWithNoIdNoEnrollId = Omit<Item,"id"|"enrollmentId">
+export type ItemWithNoIdNoEnrollId = Omit<Item,"id"|"enrollmentId"|"inTrade">
 
-export type ItemWithNoIdNoEnrollIdNoGameId = Omit<Item,"id"|"enrollmentId"|"gameId">
+export type ItemWithNoIdNoEnrollIdNoGameId = Omit<Item,"id"|"enrollmentId"|"gameId"|"inTrade">
 
 export type ItemNoIdNoEnrollIdNoGameIdNoServerIdServerName = {
     name: string,
@@ -69,5 +69,20 @@ export type PaymentNoIdNoEnrolId = Omit<Payments,"id"|"enrollmentId">
 
 export type TradePost = Pick<Trade, "sellerEnrollmentId" | "itemId">
 
-export type MessagePost = Pick<Message, "text">
-
+export type MessagePost ={
+    text: string,
+    tradeId:number
+}
+export type TradeWithEnrollsItem = {
+    id: number;
+    sellerEnrollmentId: number;
+    EnrollmentBuyer: Enrollment,
+    EnrollmentSeller: Enrollment,
+    Item: Item,
+    buyerEnrollmentId: number;
+    sellerStatus: TRADESTATUS;
+    buyerStatus: TRADESTATUS;
+    tradeStatus: TRADESTATUS;
+    itemId: number;
+  
+  }

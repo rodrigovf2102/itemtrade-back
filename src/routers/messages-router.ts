@@ -6,7 +6,7 @@ import { authenticateToken } from "@/middlewares/authentication-middleware";
 
 const messagesRouter = Router();
 
-messagesRouter.get("/:tradeId", getTradeMessages);
-messagesRouter.post("/:tradeId", validateBody(messagesSchema), authenticateToken, postMessage);
+messagesRouter.get("/:tradeId", authenticateToken,getTradeMessages);
+messagesRouter.post("/", validateBody(messagesSchema), authenticateToken, postMessage);
 
 export { messagesRouter };

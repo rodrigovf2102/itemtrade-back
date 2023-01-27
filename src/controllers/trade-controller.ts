@@ -6,6 +6,7 @@ import httpStatus from "http-status";
 export async function postTrade(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
   const { sellerEnrollmentId, itemId } = req.body;
+
   try {
     const trade = await tradeService.postTrade(sellerEnrollmentId, userId, itemId);
     return res.status(httpStatus.CREATED).send(trade);
@@ -14,11 +15,12 @@ export async function postTrade(req: AuthenticatedRequest, res: Response) {
   }
 }
 
-export async function getTrades(req: AuthenticatedRequest, res: Response){
+export async function getTradesByUserIdOrEnrollId(req: AuthenticatedRequest, res: Response){
   const { userId } = req;
+  const enrollmentId = Number(req.query.enrollmentId);
   const tradeType = req.params.tradeType;
   try {
-    const trades = await tradeService.getTrades(userId, tradeType);
+    const trades = await tradeService.getTradesByUserIdOrEnrollId(userId, tradeType, enrollmentId);
     return res.status(httpStatus.OK).send(trades);
   } catch (error) {
     return res.status(httpStatus.BAD_REQUEST).send(error);

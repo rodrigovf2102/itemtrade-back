@@ -7,7 +7,7 @@ import { OPERATIONTYPE, Trade, TradeAvaliation, TRADESTATUS } from "@prisma/clie
 
 export async function postTrade(sellerEnrollmentId: number, userId: number, itemId: number): Promise<Trade> {
   const buyerEnrollment = await enrollmentRepository.findEnrollmentByUserId(userId);
-  const sellerEnrollment = await enrollmentRepository.findEnrollmentByUserId(sellerEnrollmentId);
+  const sellerEnrollment = await enrollmentRepository.findEnrollmentById(sellerEnrollmentId);
 
   if (!buyerEnrollment || !sellerEnrollment) throw defaultError("UserEnrollmentNotFound");
   const item = await itemRepository.findItemsById(itemId);
@@ -32,11 +32,13 @@ export async function postTrade(sellerEnrollmentId: number, userId: number, item
   return trade;
 }
 
-export async function getTrades(userId: number, tradeType: string): Promise<Trade[]> {
+export async function getTradesByUserIdOrEnrollId(userId: number, tradeType: string, enrollmentId: number): Promise<Trade[]> {
   if (tradeType !== OPERATIONTYPE.PURCHASE && tradeType !== OPERATIONTYPE.SALE) {
     throw defaultError("InvalidTradeType");
   }
-  const enrollment = await enrollmentRepository.findEnrollmentByUserId(userId);
+  let enrollment;
+  if(isNaN(enrollmentId)) enrollment = await enrollmentRepository.findEnrollmentByUserId(userId);
+  if(!isNaN(enrollmentId)) enrollment = await enrollmentRepository.findEnrollmentById(enrollmentId);
   if (!enrollment) throw defaultError("UserEnrollmentNotFound");
   let trades;
   if (tradeType === OPERATIONTYPE.PURCHASE) {
@@ -104,7 +106,7 @@ export async function updateTradeStatus(userId : number, tradeId : number) : Pro
 
 const tradeService = {
   postTrade,
-  getTrades,
+  getTradesByUserIdOrEnrollId,
   getTradeAvaliations,
   getTradeById,
   updateTradeStatus

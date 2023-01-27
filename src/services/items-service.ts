@@ -33,6 +33,7 @@ export async function postItem(newItem: ItemNoIdNoEnrollIdNoGameIdNoServerIdServ
   const enrollment = await enrollmentRepository.findEnrollmentByUserId(userId);
   if (!enrollment) throw defaultError("UserWithoutEnrollment");
   const game = await gameRepository.findGameByName(newItem.gameName.toUpperCase());
+  if(!game) throw defaultError("GameNotFound");
   const server = await serverRepository.findServerByNameAndGameId(newItem.serverName.toUpperCase(),game.id);
   if(!server) throw defaultError("ServerNotFound");
   const item : ItemWithNoId = {

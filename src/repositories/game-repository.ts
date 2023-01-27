@@ -4,7 +4,8 @@ import { Game } from "@prisma/client";
 
 export async function findGames(filter:string): Promise<Game[]> {
   return prisma.game.findMany({
-    where:{name:{contains:filter}}
+    where:{name:{contains:filter}},
+    take: 30
   });
 }
 

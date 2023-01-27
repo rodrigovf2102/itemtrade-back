@@ -18,13 +18,17 @@ export async function getTradeByTradeId(tradeId: number) : Promise<TradeWithEnro
 
 export async function findTradesByBuyerEnrollmentId(enrollmentId : number) : Promise<Trade[]>{
   return prisma.trade.findMany({
-    where : { buyerEnrollmentId : enrollmentId}
+    where : { buyerEnrollmentId : enrollmentId},
+    orderBy: { id: "desc" },
+    include: { EnrollmentBuyer: true, EnrollmentSeller: true, Item: true}
   });
 }
 
 export async function findTradesBySellerEnrollmentId(enrollmentId : number) : Promise<Trade[]>{
   return prisma.trade.findMany({
-    where : { sellerEnrollmentId : enrollmentId}
+    where : { sellerEnrollmentId : enrollmentId},
+    orderBy: { id: "desc" },
+    include: { EnrollmentBuyer: true, EnrollmentSeller: true, Item: true}
   });
 }
 

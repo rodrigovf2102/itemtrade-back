@@ -13,8 +13,10 @@ export async function getEnrollment(userId:number): Promise<Enrollment> {
 
 export async function upsertEnrollment(newEnrollment: UpsertEnrollment, userId:number): Promise<Enrollment>{
   if(!isValidCPF(newEnrollment.CPF)) throw defaultError("InvalidCPF");
-  if(!newEnrollment.enrollmentUrl) newEnrollment.enrollmentUrl = "../assets/images/action.png";
-  const enrollment = await enrollmentRepository.upsertEnrollment(newEnrollment,userId);
+  let enrollment = await enrollmentRepository.findEnrollmentByCPF(newEnrollment.CPF);
+  if(enrollment) throw defaultError("CPFAlreadyExists");
+  if(!newEnrollment.enrollmentUrl) newEnrollment.enrollmentUrl = "../assets/images/action.jpg";
+  enrollment = await enrollmentRepository.upsertEnrollment(newEnrollment,userId);
   return enrollment;
 }
 

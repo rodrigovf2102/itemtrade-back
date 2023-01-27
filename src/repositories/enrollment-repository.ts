@@ -46,12 +46,19 @@ export function updateEnrollmentFreezedBalance(balance:number, id:number):Promis
   });
 }
 
+export function findEnrollmentByCPF(cpf: string) : Promise<Enrollment>{
+  return prisma.enrollment.findFirst({
+    where:{CPF:cpf}
+  });
+}
+
 const enrollmentRepository = {
   upsertEnrollment,
   findEnrollmentByUserId,
   updateEnrollmentBalance,
   updateEnrollmentFreezedBalance,
-  findEnrollmentById
+  findEnrollmentById,
+  findEnrollmentByCPF
 };
 
 export default enrollmentRepository;

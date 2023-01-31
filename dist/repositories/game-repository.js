@@ -2,8 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postGame = exports.findGameByName = exports.findGames = void 0;
 const config_1 = require("../config");
-async function findGames() {
-    return config_1.prisma.game.findMany({});
+async function findGames(filter) {
+    return config_1.prisma.game.findMany({
+        where: { name: { contains: filter } },
+        take: 30
+    });
 }
 exports.findGames = findGames;
 async function findGameByName(name) {

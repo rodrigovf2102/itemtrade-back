@@ -7,5 +7,5 @@ exports.serverSchema = void 0;
 const joi_1 = __importDefault(require("joi"));
 exports.serverSchema = joi_1.default.object({
     name: joi_1.default.string().min(3).required(),
-    gameId: joi_1.default.number().required()
+    gameName: joi_1.default.string().required()
 });

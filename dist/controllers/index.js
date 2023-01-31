@@ -19,3 +19,6 @@ __exportStar(require("./game-controller"), exports);
 __exportStar(require("./enrollment-controller"), exports);
 __exportStar(require("./server-controller"), exports);
 __exportStar(require("./item-controller"), exports);
+__exportStar(require("./payment-controller"), exports);
+__exportStar(require("./trade-controller"), exports);
+__exportStar(require("./message-controller"), exports);

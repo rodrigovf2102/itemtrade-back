@@ -86,23 +86,24 @@ model Payments {
 model Message {
   id           Int            @id @default(autoincrement())
   text         String
-  date         DateTime?      @default(now()) @db.Timestamp(6)
+  date         DateTime?      @default(now()) @db.Timestamptz(6)
   enrollmentId Int
   Enrollment   Enrollment     @relation(fields: [enrollmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   TradeMessage TradeMessage[]
 }
 
 model Trade {
-  id                 Int            @id @default(autoincrement())
+  id                 Int               @id @default(autoincrement())
   sellerEnrollmentId Int
   buyerEnrollmentId  Int
-  sellerStatus       TRADESTATUS?   @default(INCOMPLETE)
-  buyerStatus        TRADESTATUS?   @default(INCOMPLETE)
-  tradeStatus        TRADESTATUS?   @default(INCOMPLETE)
+  sellerStatus       TRADESTATUS?      @default(INCOMPLETE)
+  buyerStatus        TRADESTATUS?      @default(INCOMPLETE)
+  tradeStatus        TRADESTATUS?      @default(INCOMPLETE)
   itemId             Int
-  EnrollmentBuyer    Enrollment     @relation("Trade_buyerEnrollmentIdToEnrollment", fields: [buyerEnrollmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Item               Item           @relation(fields: [itemId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  EnrollmentSeller   Enrollment     @relation("Trade_sellerEnrollmentIdToEnrollment", fields: [sellerEnrollmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  EnrollmentBuyer    Enrollment        @relation("Trade_buyerEnrollmentIdToEnrollment", fields: [buyerEnrollmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Item               Item              @relation(fields: [itemId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  EnrollmentSeller   Enrollment        @relation("Trade_sellerEnrollmentIdToEnrollment", fields: [sellerEnrollmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  TradeAvaliation    TradeAvaliation[]
   TradeMessage       TradeMessage[]
 }
 
@@ -111,7 +112,9 @@ model TradeAvaliation {
   tradeType    OPERATIONTYPE
   tradeStatus  TRADESTATUS?  @default(INCOMPLETE)
   enrollmentId Int
+  tradeId      Int?
   Enrollment   Enrollment    @relation(fields: [enrollmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Trade        Trade?        @relation(fields: [tradeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model TradeMessage {

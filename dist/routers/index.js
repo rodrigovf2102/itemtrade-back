@@ -19,3 +19,6 @@ __exportStar(require("./games-router"), exports);
 __exportStar(require("./enrollment-router"), exports);
 __exportStar(require("./servers-router"), exports);
 __exportStar(require("./items-router"), exports);
+__exportStar(require("./payments-router"), exports);
+__exportStar(require("./trades-router"), exports);
+__exportStar(require("./messages-router"), exports);

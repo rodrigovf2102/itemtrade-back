@@ -19,3 +19,6 @@ __exportStar(require("./games-schema"), exports);
 __exportStar(require("./enrollments-schema"), exports);
 __exportStar(require("./servers-schema"), exports);
 __exportStar(require("./items-schema"), exports);
+__exportStar(require("./payments-schema"), exports);
+__exportStar(require("./trades-schema"), exports);
+__exportStar(require("./messages-schema"), exports);

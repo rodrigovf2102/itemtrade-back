@@ -17,6 +17,9 @@ app.use("/enrollment", routers_1.enrollmentRouter);
 app.use("/games", routers_1.gamesRouter);
 app.use("/servers", routers_1.serversRouter);
 app.use("/items", routers_1.itemsRouter);
+app.use("/payments", routers_1.paymentRouter);
+app.use("/trades", routers_1.tradesRouter);
+app.use("/messages", routers_1.messagesRouter);
 function start() {
     (0, config_1.connectPostgresDb)();
     return Promise.resolve(app);

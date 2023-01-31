@@ -7,8 +7,9 @@ exports.postGame = exports.getGames = void 0;
 const games_service_1 = __importDefault(require("../services/games-service"));
 const http_status_1 = __importDefault(require("http-status"));
 async function getGames(req, res) {
+    const filter = req.query.filter;
     try {
-        const games = await games_service_1.default.getGames();
+        const games = await games_service_1.default.getGames(filter);
         return res.status(http_status_1.default.OK).send(games);
     }
     catch (error) {

@@ -1,4 +1,4 @@
-import { SessionWithNoId, UserWithNoId } from "@/protocols";
+import { UserWithNoId } from "@/protocols";
 import userService from "@/services/users-service";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
@@ -22,9 +22,9 @@ export async function usersPost(req: Request, res: Response) {
 
 export async function signInPost(req: Request, res: Response) {
   const { email, password } = req.body as UserWithNoId;
-
   try {
     const result = await userService.signIn({ email, password });
+
     return res.status(httpStatus.OK).send(result);
   } catch (error) {
     if (error.detail === "PasswordInvalid") {

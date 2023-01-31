@@ -6,7 +6,7 @@ import { Game } from "@prisma/client";
 export async function createGame() : Promise<Game>{
   const game : GameWithNoId = {
     name : faker.name.firstName(),
-    gameUrl : faker.image.imageUrl(undefined,undefined,undefined,undefined,true)
+    gameUrl : faker.image.imageUrl(undefined,undefined,undefined,undefined,true),
   };
 
   return prisma.game.create({
